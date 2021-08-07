@@ -54,6 +54,7 @@ export class MoviesComponent implements OnInit {
       console.log("Tessssssssssssssssst",this.movieModelObj);
   }
 
+
   /* GET MOVIE */
   getAllMovie() {
     this.api.getMovie()
