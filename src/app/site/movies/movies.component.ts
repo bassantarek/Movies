@@ -11,8 +11,8 @@ import { ApiService } from 'src/app/shared/api.service';
 export class MoviesComponent implements OnInit {
 
   formValue !: FormGroup;
-  movieModelObj: MovieModel = new MovieModel();
-  movieData !: any;
+  movieModelObj!: MovieModel;
+  movieData !: MovieModel[];
   showAdd !: boolean;
   showUpdate !: boolean;
   movieNameFilter: string = "";
@@ -37,11 +37,11 @@ export class MoviesComponent implements OnInit {
 
   /* POST MOVIE */
   postMovieDetails() {
-    this.movieModelObj.Name = this.formValue.value.movieName;
-    this.movieModelObj.CategoryName = this.formValue.value.category;
+    // this.movieModelObj.name = this.formValue.value.movieName;
+    // this.movieModelObj.categoryName = this.formValue.value.category;
 
     this.api.postMovie(this.movieModelObj)
-      .subscribe(res => {
+    .subscribe(res => {
         console.log(res);
         alert("Movie is added successfully ^_^");
         let ref = document.getElementById('cancel');
@@ -77,14 +77,14 @@ export class MoviesComponent implements OnInit {
   onEdit(row: any) {
     this.showAdd = false;
     this.showUpdate = true;
-    this.movieModelObj.Id = row.id;
+    this.movieModelObj.id = row.id;
     this.formValue.controls['movieName'].setValue(row.movieName);
     this.formValue.controls['category'].setValue(row.category);
   }
 
   updateMovieDetails() {
-    this.movieModelObj.Name = this.formValue.value.movieName;
-    this.movieModelObj.CategoryName = this.formValue.value.category;
+    this.movieModelObj.name = this.formValue.value.movieName;
+    this.movieModelObj.categoryName = this.formValue.value.category;
     this.api.updateMovie(this.movieModelObj)
       .subscribe(res => {
         alert("Updated Successfully ^_^");
@@ -117,7 +117,7 @@ export class MoviesComponent implements OnInit {
       console.log("else if movieData", this.movieData);
       console.log("else if movieDataWithFilter", movieDataWithFilter);
     }
-    else if (this.movieData == "") {
+    else if (this.movieData.length === 0) {
       //  this.movieData = movieDataWithFilter;
       this.getAllMovie();
       console.log("else if movieData", this.movieData);

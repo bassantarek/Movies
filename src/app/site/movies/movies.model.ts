@@ -1,5 +1,5 @@
-export class MovieModel {
-  Id: string = "";
-  Name : string = "";
-  CategoryName: string = "";
+export interface MovieModel {
+  id: string
+  name : string
+  categoryName: string
 }
