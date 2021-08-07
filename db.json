@@ -1,0 +1,48 @@
+{
+  "posts": [
+    {
+      "id": 2,
+      "movieName": "Me Before You",
+      "category": "Romance"
+    },
+    {
+      "id": 3,
+      "movieName": "John Wick22",
+      "category": "Action"
+    },
+    {
+      "id": 4,
+      "movieName": "Harry Potter",
+      "category": "Magic"
+    },
+    {
+      "id": 6,
+      "movieName": "Fantastic Beast",
+      "category": "Magic"
+    },
+    {
+      "id": 7,
+      "movieName": "The Rock",
+      "category": "Action"
+    },
+    {
+      "id": 8,
+      "movieName": "Interstellar",
+      "category": "Science Fiction"
+    },
+    {
+      "id": 9,
+      "movieName": "Rocky",
+      "category": "Action"
+    },
+    {
+      "id": 10,
+      "movieName": "hellooooo",
+      "category": "Romance"
+    }
+  ],
+  "comments": [],
+  "profile": {
+    "name": "typicode"
+  }
+}
