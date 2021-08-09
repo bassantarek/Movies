@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryModel } from './categories.model';
-import { ApiService } from 'src/app/shared/api.service';
+import { MoviesService } from 'src/app/shared/movies.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CategoryService } from 'src/app/shared/category.service';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
-
+  categoryName !: string;
   formValue !: FormGroup;
   categoryModelObj: CategoryModel = new CategoryModel();
   categoryData !: any;
@@ -18,12 +19,12 @@ export class CategoriesComponent implements OnInit {
   // movieDataWithoutFilter !: any;
   categoryDataWithoutFilter: any = [];
   category: string = '';
-  constructor(private formbuilder: FormBuilder, private api: ApiService) { }
+  constructor(private formbuilder: FormBuilder, private api: CategoryService) { }
 
   ngOnInit(): void {
     this.formValue = this.formbuilder.group({
-      movieName: [''],
-      category: ['']
+      name: [''],
+      id: ['']
     });
 
     this.getAllCategory();
@@ -37,10 +38,9 @@ export class CategoriesComponent implements OnInit {
 
   /* POST MOVIE */
   postCategoryDetails() {
-    this.categoryModelObj.movieName = this.formValue.value.movieName;
-    this.categoryModelObj.category = this.formValue.value.category;
+    //this.categoryModelObj.categoryName = this.formValue.value.category;
 
-    this.api.postCategory(this.categoryModelObj)
+    this.api.postCategory(this.formValue.value)
       .subscribe(res => {
         console.log(res);
         alert("Movie is added successfully ^_^");
@@ -50,6 +50,8 @@ export class CategoriesComponent implements OnInit {
         this.getAllCategory();
       }, err => {
         alert("Something went wrong XX ")
+        console.log(err);
+
       });
   }
 
@@ -71,18 +73,18 @@ export class CategoriesComponent implements OnInit {
   }
 
   /* UPDATE MOVIE */
-  onEdit(row: any) {
+  onEdit(row: CategoryModel) {
     this.showAdd = false;
     this.showUpdate = true;
-    this.categoryModelObj.id = row.id;
-    this.formValue.controls['movieName'].setValue(row.movieName);
-    this.formValue.controls['category'].setValue(row.category);
+    // this.categoryModelObj.id = row.id;
+    this.formValue.controls['id'].setValue(row.id);
+    //this.formValue.controls['name'].setValue(row.categoryName);
+    this.formValue.get('name')?.setValue(row.categoryName);
   }
 
   updateCategoryDetails() {
-    this.categoryModelObj.movieName = this.formValue.value.movieName;
-    this.categoryModelObj.category = this.formValue.value.category;
-    this.api.updateMovie(this.categoryModelObj)
+    // this.categoryModelObj.categoryName = this.formValue.value.category;
+    this.api.updateCategory(this.formValue.value)
       .subscribe(res => {
         alert("Updated Successfully ^_^");
         let ref = document.getElementById('cancel');

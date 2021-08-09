@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MovieModel } from './movies.model';
-import { ApiService } from 'src/app/shared/api.service';
+import { MoviesService } from 'src/app/shared/movies.service';
+import { CategoryService } from 'src/app/shared/category.service';
+import { CategoryModel } from '../categories/categories.model';
 
 @Component({
   selector: 'app-movies',
@@ -18,15 +20,19 @@ export class MoviesComponent implements OnInit {
   movieNameFilter: string = "";
   categoryFilter : string = "";
   category: string = '';
-  constructor(private formbuilder: FormBuilder, private api: ApiService) { }
+  categoryData !: CategoryModel[];
+  categoryName !: string;
+  constructor(private formbuilder: FormBuilder, private movies: MoviesService, private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.formValue = this.formbuilder.group({
-      movieName: [''],
-      category: ['']
+      name: [''],
+      categoryId: [''],
+      id:['']
     });
 
     this.getAllMovie();
+    this.getAllCategory();
   }
 
   clickAddMovie() {
@@ -37,10 +43,7 @@ export class MoviesComponent implements OnInit {
 
   /* POST MOVIE */
   postMovieDetails() {
-    // this.movieModelObj.name = this.formValue.value.movieName;
-    // this.movieModelObj.categoryName = this.formValue.value.category;
-
-    this.api.postMovie(this.movieModelObj)
+    this.movies.postMovie(this.formValue.value)
     .subscribe(res => {
         console.log(res);
         alert("Movie is added successfully ^_^");
@@ -57,7 +60,7 @@ export class MoviesComponent implements OnInit {
 
   /* GET MOVIE */
   getAllMovie() {
-    this.api.getMovie()
+    this.movies.getMovie()
       .subscribe(res => {
         this.movieData = res;
       });
@@ -66,7 +69,7 @@ export class MoviesComponent implements OnInit {
 
   /* DELETE MOVIE */
   deleteMovie(row: any) {
-    this.api.deleteMovie(row.id)
+    this.movies.deleteMovie(row.id)
       .subscribe(res => {
         alert("Movie Deleted");
         this.getAllMovie();
@@ -74,18 +77,19 @@ export class MoviesComponent implements OnInit {
   }
 
   /* UPDATE MOVIE */
-  onEdit(row: any) {
+  onEdit(row: MovieModel) {
     this.showAdd = false;
     this.showUpdate = true;
-    this.movieModelObj.id = row.id;
-    this.formValue.controls['movieName'].setValue(row.movieName);
-    this.formValue.controls['category'].setValue(row.category);
+    //this.movieModelObj.id = row.id;
+    this.formValue.controls['name'].setValue(row.name);
+    this.formValue.controls['categoryId'].setValue(row.categoryId);
+    this.formValue.controls['id'].setValue(row.id);
   }
 
   updateMovieDetails() {
-    this.movieModelObj.name = this.formValue.value.movieName;
-    this.movieModelObj.categoryName = this.formValue.value.category;
-    this.api.updateMovie(this.movieModelObj)
+   /*  this.movieModelObj.name = this.formValue.value.movieName;
+    this.movieModelObj.categoryName = this.formValue.value.category; */
+    this.movies.updateMovie(this.formValue.value)
       .subscribe(res => {
         alert("Updated Successfully ^_^");
         let ref = document.getElementById('cancel');
@@ -94,6 +98,14 @@ export class MoviesComponent implements OnInit {
         this.getAllMovie();
       });
   }
+
+    /* GET CATEGory */
+    getAllCategory() {
+      this.categoryService.getCategory()
+        .subscribe(res => {
+          this.categoryData = res;
+        });
+    }
 
   /* SEARCH */
   FilterFn() {
