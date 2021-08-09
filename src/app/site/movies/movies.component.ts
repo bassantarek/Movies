@@ -13,7 +13,6 @@ import { CategoryModel } from '../categories/categories.model';
 export class MoviesComponent implements OnInit {
 
   formValue !: FormGroup;
-  movieModelObj!: MovieModel;
   movieData !: MovieModel[];
   showAdd !: boolean;
   showUpdate !: boolean;
@@ -21,7 +20,7 @@ export class MoviesComponent implements OnInit {
   categoryFilter : string = "";
   category: string = '';
   categoryData !: CategoryModel[];
-  categoryName !: string;
+  categoryName : string = "";
   constructor(private formbuilder: FormBuilder, private movies: MoviesService, private categoryService: CategoryService) { }
 
   ngOnInit(): void {
@@ -54,7 +53,6 @@ export class MoviesComponent implements OnInit {
       }, err => {
         alert("Something went wrong XX ")
       });
-      console.log("Tessssssssssssssssst",this.movieModelObj);
   }
 
 
@@ -87,8 +85,6 @@ export class MoviesComponent implements OnInit {
   }
 
   updateMovieDetails() {
-   /*  this.movieModelObj.name = this.formValue.value.movieName;
-    this.movieModelObj.categoryName = this.formValue.value.category; */
     this.movies.updateMovie(this.formValue.value)
       .subscribe(res => {
         alert("Updated Successfully ^_^");
@@ -111,29 +107,19 @@ export class MoviesComponent implements OnInit {
   FilterFn() {
     let movieNameFilter = this.movieNameFilter;
     let movieDataWithFilter = this.movieData;
-    // console.log("IF movieDataWithFilter",movieDataWithFilter);
-    // console.log("IF movieData", this.movieData);
+    console.log("rrrrrrrrrrrr (^_^) rrrrrrrrrrrrrrr", this.movieData)
     if(movieNameFilter != "") {
-      console.log("Test Value : ",movieNameFilter);
-      // console.log("Test Value movie DataWithFilter: ",movieDataWithFilter);
-
+      console.log("Test Valueeeeeeee : ",movieNameFilter);
       this.movieData = movieDataWithFilter.filter(function (el: any) {
-        return el.movieName.toString().toLowerCase().includes(
+        return el.name.toString().toLowerCase().includes(
           movieNameFilter.toString().trim().toLowerCase()
         );
       });
-      movieDataWithFilter = this.movieData;
+      // console.log("Iffffff : ",this.movieData);
     } else if (movieNameFilter == "") {
-      //  this.movieData = movieDataWithFilter;
       this.getAllMovie();
-      console.log("else if movieData", this.movieData);
-      console.log("else if movieDataWithFilter", movieDataWithFilter);
-    }
-    else if (this.movieData.length === 0) {
-      //  this.movieData = movieDataWithFilter;
-      this.getAllMovie();
-      console.log("else if movieData", this.movieData);
-      console.log("else if movieDataWithFilter", movieDataWithFilter);
+    /*   console.log("else if movieDataWithFilter", movieDataWithFilter);
+      console.log("else iffffffff",this.movieData); */
     }
   }
 
@@ -142,15 +128,14 @@ export class MoviesComponent implements OnInit {
     let categoryFilter = this.categoryFilter;
     let movieDataWithFilter = this.movieData;
     console.log(this.category);
-    if (this.categoryFilter != "") {
+    if (categoryFilter != "") {
       this.movieData = movieDataWithFilter.filter(function (el: any) {
-        return el.category.toString().toLowerCase().includes(
+        return el.categoryName.toString().toLowerCase().includes(
           categoryFilter.toString().trim().toLowerCase()
         );
       });
     } else if (this.categoryFilter == "") {
       this.getAllMovie();
-      // this.movieData = movieDataWithFilter;
     }
   }
 
